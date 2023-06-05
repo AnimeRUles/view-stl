@@ -36,6 +36,10 @@ export default {
         let middle = null
         let stats = null
 
+        let sizeX = null
+        let sizeY = null
+        let sizeZ = null
+
         const init = async () => {
             const view = viewRef.value
 
@@ -108,7 +112,12 @@ export default {
                     rafId = requestAnimationFrame(animate)
                     if (isLoadEnd && !isReady) {
                         isReady = true
-                        ctx.emit('ready', { uuid: props.uuid })
+                        ctx.emit('ready', {
+                            uuid: props.uuid,
+                            sizeX,
+                            sizeY,
+                            sizeZ
+                        })
                     }
                 }
             }
@@ -173,6 +182,18 @@ export default {
                         geometry.boundingBox.max.y,
                         geometry.boundingBox.max.z)
                     camera.position.z = largestDimension * 2;
+
+                    sizeX = Math.round(
+                        Math.abs(geometry.boundingBox.max.x)
+                            + Math.abs(geometry.boundingBox.min.x), 1)
+
+                    sizeY = Math.round(
+                        Math.abs(geometry.boundingBox.max.y)
+                            + Math.abs(geometry.boundingBox.min.y))
+
+                    sizeZ = Math.round(
+                        Math.abs(geometry.boundingBox.max.z)
+                            + Math.abs(geometry.boundingBox.min.z))
 
                     isLoadEnd = true
                 },
